@@ -19,10 +19,9 @@ jobs:
           java-version: 17
 
       - name: Run Updater
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: run --args='..'
-          build-root-directory: updater
+        run: |
+          cd updater
+          ./gradlew run --args='--dry-run'
 
       - name: Generate Github Token
         uses: tibdex/github-app-token@v2
