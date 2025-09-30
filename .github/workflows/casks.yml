@@ -29,6 +29,7 @@ jobs:
     name: Run Matrix Job
     runs-on: ubuntu-latest
     needs: changed-files
+    if: ${{ needs.changed-files.outputs.matrix != '[]' }}
     strategy:
       matrix:
         files: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
@@ -40,3 +41,19 @@ jobs:
       - name: Test
         run: |
           echo ${{ matrix.files }}
+
+  # Status check that is required in branch protection rules.
+  cask-status:
+    needs:
+      - matrix-job
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check
+        run: |
+          results=$(tr -d '\n' <<< '${{ toJSON(needs.*.result) }}')
+          if ! grep -q -v -E '(failure|cancelled)' <<< "$results"; then
+            echo "One or more required jobs failed"
+            exit 1
+          fi
+          echo "All required jobs completed successfully."
