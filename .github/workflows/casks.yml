@@ -1,0 +1,45 @@
+name: Check Casks
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/reusable-cask-checks.yml'
+      - 'Casks/zulu-jdk7.rb'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/reusable-cask-checks.yml'
+      - 'Casks/zulu-jdk7.rb'
+
+jobs:
+  check-casks:
+    strategy:
+      matrix:
+        os: # https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+          - macos-latest # Based on arm64.
+          - macos-15-intel # Based on x64.
+        cask:
+          - zulu-jdk8
+          - zulu-jdk11
+          - zulu-jdk17
+          - zulu-jdk21
+          - zulu-jdk25
+    runs-on: ${{ matrix.os }}
+    env:
+      HOMEBREW_COLOR: 1
+      HOMEBREW_DEVELOPER: 1
+    steps:
+      - uses: actions/checkout@v5
+      - name: brew pull & reset & tap
+        run: |
+          brew update-reset "$(brew --repository)"
+          brew update-reset "$(brew --repository homebrew/cask)"
+          mkdir -p $(brew --repo)/Library/Taps/mdogan
+          ln -s $GITHUB_WORKSPACE $(brew --repo)/Library/Taps/mdogan/homebrew-zulu
+      - name: install jdk
+        run: brew install ${{ matrix.cask }}
+      - name: uninstall jdk
+        run: brew uninstall ${{ matrix.cask }}
