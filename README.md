@@ -37,4 +37,4 @@ brew install <name>
 | OpenJDK 23 | `zulu-jdk23` | 23.0.2 |
 | OpenJDK 24 | `zulu-jdk24` | 24.0.2 |
 | OpenJDK 25 | `zulu-jdk25` | 25.0.0 |
-| Mission Control | `zulu-mc` | 9.1.0.25 | [![MC](https://github.com/mdogan/homebrew-zulu/actions/workflows/mc.yml/badge.svg?branch=master&event=push)](https://github.com/mdogan/homebrew-zulu/actions/workflows/mc.yml) |
+| Mission Control | `zulu-mc` | 9.1.0.25 |

@@ -38,7 +38,6 @@ public final class Main {
 
     var readmeFile = repoDir.resolve("README.md");
     var caskDir = repoDir.resolve("Casks");
-    var workflowsDir = repoDir.resolve(".github/workflows");
 
     Map<Integer, PackageSet> jdkPackages = loadJdks();
     for (var entry : jdkPackages.entrySet()) {
@@ -106,18 +105,11 @@ public final class Main {
               .sorted(Entry.comparingByKey())
               .toList();
       for (var e : sortedVersions) {
-        var jdkVersion = e.getKey();
-        w.writeUtf8(
-            "| OpenJDK "
-                + jdkVersion
-                + " | `zulu-jdk"
-                + jdkVersion
-                + "` | "
-                + e.getValue()
-                + " |\n");
+        var mjrVer = e.getKey();
+        var semVer = e.getValue();
+        w.writeUtf8("| OpenJDK %s | `zulu-jdk%s` | %s |\n".formatted(mjrVer, mjrVer, semVer));
       }
-      w.writeUtf8(
-          "| Mission Control | `zulu-mc` | 9.1.0.25 | [![MC](https://github.com/mdogan/homebrew-zulu/actions/workflows/mc.yml/badge.svg?branch=master&event=push)](https://github.com/mdogan/homebrew-zulu/actions/workflows/mc.yml) |\n");
+      w.writeUtf8("| Mission Control | `zulu-mc` | 9.1.0.25 |\n");
     }
   }
 
