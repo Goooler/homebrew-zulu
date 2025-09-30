@@ -25,8 +25,8 @@ jobs:
       - name: List all changed files
         run: echo '${{ steps.changed-files.outputs.all_changed_files }}'
 
-  check-casks:
-    name: Check casks
+  verify-casks:
+    name: Verify casks
     needs:
       - changed-casks
     if: ${{ needs.changed-casks.outputs.matrix != '[]' }}
@@ -61,7 +61,7 @@ jobs:
   cask-status:
     name: Cask status
     needs:
-      - check-casks
+      - verify-casks
     runs-on: ubuntu-latest
     if: always()
     steps:
