@@ -10,7 +10,7 @@ on:
 
 jobs:
   changed-casks:
-    name: Get changed casks
+    name: Get changed Casks
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.changed-files.outputs.all_changed_files }}
@@ -25,8 +25,8 @@ jobs:
       - name: List all changed files
         run: echo '${{ steps.changed-files.outputs.all_changed_files }}'
 
-  verify-casks:
-    name: Verify casks
+  verify-cask:
+    name: Verify Casks
     needs:
       - changed-casks
     if: ${{ needs.changed-casks.outputs.matrix != '[]' }}
@@ -49,19 +49,19 @@ jobs:
           brew update-reset "$(brew --repository homebrew/cask)"
           mkdir -p $(brew --repo)/Library/Taps/mdogan
           ln -s $GITHUB_WORKSPACE $(brew --repo)/Library/Taps/mdogan/homebrew-zulu
-      - name: cask name
+      - name: Get Cask name
         run: |
           echo "CASK_NAME=$(basename "${{ matrix.cask-file }}" .rb)" >> $GITHUB_ENV
-      - name: install jdk
+      - name: Install Cask
         run: brew install ${{ env.CASK_NAME }}
-      - name: uninstall jdk
+      - name: Uninstall Cask
         run: brew uninstall ${{ env.CASK_NAME }}
 
   # Status check that is required in branch protection rules.
-  cask-status:
-    name: Cask status
+  final-status:
+    name: Final status
     needs:
-      - verify-casks
+      - verify-cask
     runs-on: ubuntu-latest
     if: always()
     steps:
