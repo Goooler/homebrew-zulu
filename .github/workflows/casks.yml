@@ -57,7 +57,7 @@ jobs:
       - name: Uninstall Cask
         run: brew uninstall ${{ env.CASK_NAME }}
       - name: Audit Cask
-        run: brew audit ${{ env.CASK_NAME }}
+        run: brew audit --strict ${{ env.CASK_NAME }}
 
   # Status check that is required in branch protection rules.
   final-status:
