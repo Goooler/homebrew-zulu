@@ -15,7 +15,7 @@ jobs:
     outputs:
       matrix: ${{ steps.changed-files.outputs.all_changed_files }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v47
@@ -42,7 +42,7 @@ jobs:
       HOMEBREW_COLOR: 1
       HOMEBREW_DEVELOPER: 1
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: brew pull & reset & tap
         run: |
           brew update-reset "$(brew --repository)"
