@@ -1,6 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
   id('java')
   id('application')
+  alias(libs.plugins.shadow)
   alias(libs.plugins.spotless)
 }
 
@@ -20,6 +23,13 @@ dependencies {
   implementation(libs.retrofit.moshi)
   implementation(libs.okhttp)
   implementation(libs.moshi)
+}
+
+tasks.named('shadowJar', ShadowJar) {
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  enableAutoRelocation = true
+  failOnDuplicateEntries = true
+  minimize()
 }
 
 tasks.named('run', JavaExec) {
