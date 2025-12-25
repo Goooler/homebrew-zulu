@@ -9,7 +9,6 @@ jobs:
   upgrade:
     name: Upgrade Casks
     runs-on: ubuntu-latest
-    if: github.repository == 'mdogan/homebrew-zulu'
     steps:
       - uses: actions/checkout@v6
 
