@@ -39,9 +39,9 @@ jobs:
         run: |
           brew update-reset "$(brew --repository)"
           brew update-reset "$(brew --repository homebrew/cask)"
-          TAP_BASE=$(brew --taps)/mdogan
+          TAP_BASE=$(brew --taps)/${{ github.repository_owner }}
           mkdir -p $TAP_BASE
-          ln -s $GITHUB_WORKSPACE $TAP_BASE/homebrew-zulu
+          ln -s $GITHUB_WORKSPACE $TAP_BASE/${{ github.event.repository.name }}
       - name: Check Package
         run: |
           PACKAGE_NAME="$(basename "${{ matrix.packages }}" .rb)"
