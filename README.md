@@ -11,8 +11,14 @@ brew tap mdogan/zulu
 brew install <name>
 ```
 
-> :information_source: You can use the [`updater`](updater) app to prepare new & updated Casks, instead of manually editing the files.
+## Updating Casks:
 
+Instead of manually editing the files, run the updater script (Python 3.10+, no third-party dependencies) to prepare
+new & updated Casks:
+
+```bash
+python3 updater.py
+```
 
 ## Versions
 

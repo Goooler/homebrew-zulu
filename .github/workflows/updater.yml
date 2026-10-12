@@ -6,28 +6,18 @@ on:
       - master
     paths:
       - '.github/workflows/updater.yml'
-      - 'updater/**'
+      - 'updater.py'
   pull_request:
     paths:
       - '.github/workflows/updater.yml'
-      - 'updater/**'
+      - 'updater.py'
 
 jobs:
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  updater:
+    name: Updater
+    runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version: 25
-
-      - uses: gradle/actions/setup-gradle@v5
-
-      - name: Build
-        run: |
-          cd updater
-          ./gradlew build run
+      - run: python3 updater.py
