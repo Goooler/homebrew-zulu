@@ -6,7 +6,7 @@ import sys
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any, NamedTuple, Sequence
 
 BASE_URL = "https://api.azul.com/metadata/v1/zulu/packages/"
 USER_AGENT = "homebrew-zulu-updater/1.0"
@@ -147,13 +147,23 @@ def render_cask(jdk_version: int, packages: PackageSet) -> str:
 
 def render_readme(readme_text: str, jdk_packages: dict[int, PackageSet]) -> str:
   readme_start = readme_text[: readme_text.index(VERSION_HEADER) + len(VERSION_HEADER)]
-  out = [readme_start, "| JDK | Cask Name | Version |\n", "|--|--|--|\n"]
-  for jdk_version, packages in sorted(jdk_packages.items()):
-    out.append(
-      f"| OpenJDK {jdk_version} | `zulu-jdk{jdk_version}` | {packages.x86.java_version_string} |\n"
-    )
-  out.append("| Mission Control | `zulu-mc` | 9.1.0.25 |\n")
+  header = ("JDK", "Cask Name", "Version")
+  rows = [
+    (f"OpenJDK {jdk_version}", f"`zulu-jdk{jdk_version}`", packages.x86.java_version_string)
+    for jdk_version, packages in sorted(jdk_packages.items())
+  ]
+  rows.append(("Mission Control", "`zulu-mc`", "9.1.0.25"))
+
+  # Pad every column to its widest cell so the table is aligned in plain text.
+  widths = [max(map(len, column)) for column in zip(header, *rows)]
+  out = [readme_start, render_table_row(header, widths)]
+  out.append("|" + "|".join("-" * (width + 2) for width in widths) + "|\n")
+  out.extend(render_table_row(row, widths) for row in rows)
   return "".join(out)
+
+
+def render_table_row(cells: Sequence[str], widths: Sequence[int]) -> str:
+  return "| " + " | ".join(cell.ljust(width) for cell, width in zip(cells, widths)) + " |\n"
 
 
 def main(args: list[str]) -> None:
